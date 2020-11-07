@@ -15,7 +15,10 @@
   </style>
 </head>
 <body>
-  <div class="listing">
+  <div class="filters">
+    <div class="filters__item js-filters__item">Test</div>
+  </div>
+  <div class="jobItems">
   
     <div class="jobItem">
       <a href="" class="jobItem__image">
@@ -35,11 +38,11 @@
         </div>
       </div>
       <div class="jobItem__tools tools">
-        <a href="" class="tools__item" data-role="frontend">Frontend/a>
-        <a href="" class="tools__item" data-level="senior">Senior</a>
-        <a href="" class="tools__item" data-language="HTML">HTML</a>
-        <a href="" class="tools__item" data-language="CSS">CSS</a>
-        <a href="" class="tools__item" data-language="JavaScript">JavaScript</a>
+        <a href="" class="tools__item js-tools__item" data-filter="frontend">Frontend</a>
+        <a href="" class="tools__item js-tools__item" data-filter="senior">Senior</a>
+        <a href="" class="tools__item js-tools__item" data-filter="HTML">HTML</a>
+        <a href="" class="tools__item js-tools__item" data-filter="CSS">CSS</a>
+        <a href="" class="tools__item js-tools__item" data-filter="JavaScript">JavaScript</a>
       </div>
     </div>
   </div>
@@ -61,10 +64,10 @@
       </div>
     </div>
     <div class="jobItem__tools tools">
-      <a href="" class="tools__item" data-role="Fullstack">Fullstack</a>
-      <a href="" class="tools__item" data-level="senior">Midweight</a>
-      <a href="" class="tools__item" data-language="HTML">Python</a>
-      <a href="" class="tools__item" data-language="CSS">React</a>
+      <a href="" class="tools__item js-tools__item" data-filter="Fullstack">Fullstack</a>
+      <a href="" class="tools__item js-tools__item" data-filter="senior">Midweight</a>
+      <a href="" class="tools__item js-tools__item" data-filter="HTML">Python</a>
+      <a href="" class="tools__item js-tools__item" data-filter="CSS">React</a>
     </div>
   </div>
 
@@ -209,5 +212,6 @@
     Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
     Coded by <a href="#">Your Name Here</a>.
   </div>
+  <script src="/js/scripts.js"></script>
 </body>
 </html>
