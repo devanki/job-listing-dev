@@ -1,6 +1,69 @@
-let filterBtnArray = document.getElementsByClassName('js-tools__item');
-let filtersList = document.querySelector('.filters');
-let filterArray = document.getElementsByClassName('js-filters__item');
+const filterBtnArray = document.getElementsByClassName('js-tools__item');
+const filtersList = document.querySelector('.filters');
+const filterArray = document.getElementsByClassName('js-filters__item');
+const body = document.querySelector('body');
+
+async function getJobs() {
+    let url = './data.json';
+    try {
+        let res = await fetch(url);
+        return await res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function languages(languages) {
+    return `
+        ${languages.map(language => `<a class="tools__item js-tools__item" data-languages="${language}" data-filter="${language}">${language}</a>`).join("")}
+  `;
+}
+
+function tools(tools) {
+    return `
+        ${tools.map(tool => `<a class="tools__item js-tools__item" data-tools="${tool}" data-filter="${tool}">${tool}</a>`).join("")}
+  `;
+}
+
+async function renderJobList() {
+    let jobs = await getJobs();
+    let html = '';
+    jobs.forEach(job => {
+    let htmlSegment = `
+                    <div class="jobItem">
+                        <a href="" class="jobItem__image">
+                        <img src="${job.logo}" alt="${job.name}">
+                        </a>
+                        <div class="jobItem__info">
+                        <div class="jobItem__infoRow jobItem__infoRow--company">
+                            <strong>${job.company}</strong>
+                            ${job.new ? `<span class="infoButton">New!</span>` : '' }
+                            ${job.featured ? `<span class="infoButton infoButton--featured">Featured</span>` : '' }
+                        </div>
+                        <div class="jobItem__infoRow jobItem__infoRow--title">${job.position}</div>
+                        <div class="jobItem__infoRow jobItem__infoRow--info">
+                            <span class="jobItem__tag" data-when="${job.postedAt}">${job.postedAt}</span>
+                            <span class="jobItem__tag" data-contract="${job.contract}">${job.contract}</span>
+                            <span class="jobItem__tag" data-location="${job.location}">${job.location}</span>
+                        </div>
+                        </div>
+                        <div class="jobItem__tools tools">
+                        <a class="tools__item js-tools__item" data-role="${job.role}" data-filter="${job.role}">${job.role}</a>
+                        <a class="tools__item js-tools__item" data-level="${job.level}" data-filter="${job.level}">${job.level}</a>
+                        ${job.languages ? languages(job.languages) : ""}
+                        ${job.tools ? tools(job.tools) : ""}
+                        </div>
+                    </div>`;
+        html += htmlSegment;
+        
+    });
+
+    let container = document.querySelector('.jobItems');
+    container.innerHTML = html;
+}
+
+renderJobList();
+
 
 
 function addFilterHandler(e) { 
@@ -16,7 +79,14 @@ function addFilterHandler(e) {
     filtersList.appendChild(newFilterElement);
     newFilterElement.onclick = removeFilterHandler;
 
+
+    // function HideShowItems(element, index, array) {
+    // }
+    // visible = [12, 5, 8, 130, 44].filter(HideShowItems);
+
+
 };
+
 
 function removeFilterHandler(el) {
     let element = el.target;
@@ -45,11 +115,12 @@ function checkIfExist() {
     //  }
 }
 
+
 Array.from(filterBtnArray).forEach((btn) => {
-    btn.addEventListener('click', addFilterHandler);
+    body.addEventListener('click', btn, addFilterHandler);
 });
 
 Array.from(filterArray).forEach((btn) => {
-    btn.addEventListener('click', removeFilterHandler);
+    body.addEventListener('click', btn, removeFilterHandler);
 });
 

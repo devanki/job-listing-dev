@@ -1,0 +1,47 @@
+:root {
+    --color1: #AD7A99;
+    --color2: #c8d1d6;
+    --color3: #8CDFD6;
+    --color4: #6DC0D5;
+    --color5: #5A716A;
+}
+body {
+    font-family: sans-serif;
+    line-height: 1.5;
+    font-size: 16px;
+}
+.jobItem {
+    background-color: var(--color2);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.jobItem__image {
+    width: 130px;
+}
+.jobItem__info {
+    width: 270px;
+}
+.jobItem__tools {
+    width: calc(100% - 400px);
+}
+.tools {
+    display: flex;
+    justify-content: flex-end;
+}
+.tools__item {
+    padding: 5px 10px;
+    background-color: var(--color1);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition:  background-color .25s;
+    margin: 2px;
+}
+.tools__item:hover {
+    background-color: var(--color5);
+}
