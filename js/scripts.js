@@ -1,5 +1,5 @@
 const body = document.querySelector('body');
-const filterBtnArray = document.getElementsByClassName('js-tools__item');
+const toolsBtnArray = document.getElementsByClassName('js-tools__item');
 const filtersParentHtml = document.querySelector('.filters');
 let filterArray = [];
 
@@ -81,6 +81,9 @@ function addFilterHandler(e) {
 
 function removeFilterHandler(el) {
     let element = el.target;
+    let filter = element.dataset.filter;
+    filterArray = filterArray.filter( (value) => { return value != filter;} );
+    console.log(filterArray);
     element.remove();
 }
 
