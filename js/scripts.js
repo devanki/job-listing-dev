@@ -1,6 +1,7 @@
 const body = document.querySelector('body');
 const toolsBtnArray = document.getElementsByClassName('js-tools__item');
-const filtersParentHtml = document.querySelector('.filters');
+const filtersContainer = document.querySelector('.filters');
+const jobItemsContainer = document.querySelector('.jobItems');
 let filterArray = [];
 
 async function getJobs() {
@@ -64,41 +65,67 @@ function tools(tools) {
 function addFilterHandler(e) { 
     e.preventDefault();
     const filterElement = e.target.getAttribute('data-filter');
-    const filterElementTitle = e.target.textContent; 
-    let newFilterElement = document.createElement('div');
+    const filterElementTitle = e.target.textContent;
 
     if ( !filterArray.includes(filterElement) ) {
-        filterArray.push(filterElement);
-        console.log(filterArray);
+        let newFilterElement = document.createElement('div');
         newFilterElement.classList.add('js-filters__item','filters__item');
         newFilterElement.setAttribute('data-filter', filterElement);
         newFilterElement.textContent = filterElementTitle;
-        filtersParentHtml.appendChild(newFilterElement);
+        filtersContainer.appendChild(newFilterElement);
+
+        filterArray.push(filterElement);
+        console.log(filterArray);
+
+
+        // fitering on jobList 
+        // 
+        let jobListItems = document.querySelectorAll('.jobItem');
+        let elementsWithProperFilter = document.querySelectorAll( '.jobItem [data-filter="' + filterElement + '"]');
+        
+        jobListItems.forEach(function(job) {
+            let classList = job.classList;
+            if ( classList.contains('visible') ) {
+                classList.remove("visible");  
+            }
+            classList.add("hidden");
+        });
+        
+        for (let i = 0; i < elementsWithProperFilter.length; i++) {
+            let parent = elementsWithProperFilter[i].closest('.jobItem');
+            let parentClassList = parent.classList;
+
+            if ( parentClassList.contains('hidden') ) {
+                parentClassList.remove('hidden');  
+            }
+            parentClassList.add('visible');
+        }
+
     } else {
-        console.log('filter already exist');
+        console.log('filter already exists');
     }
 };
 
 function removeFilterHandler(el) {
     let element = el.target;
     let filter = element.dataset.filter;
-    filterArray = filterArray.filter( (value) => { return value != filter;} );
+    filterArray = filterArray.filter( (value) => { return value != filter; } );
     console.log(filterArray);
     element.remove();
 }
 
 renderJobList();
 
-document.addEventListener('click', function(e){
+document.addEventListener('click', function(e) {
     const elem = e.target;
     if(elem && elem.dataset.filter && elem.classList.contains('tools__item')) {
         addFilterHandler(e);
     }
 });
 
-document.addEventListener('click', function(e){
+document.addEventListener('click', function(e) {
     const elem = e.target;
-    if(elem && elem.dataset.filter && elem.classList.contains('filters__item')) {
+    if( elem && elem.dataset.filter && elem.classList.contains('filters__item') ) {
         removeFilterHandler(e);
     }
 });

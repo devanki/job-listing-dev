@@ -19,6 +19,12 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+.jobItem.hidden {
+    display: none;
+}
+.jobItem.visible {
+    display: flex;
+}
 .jobItem__image {
     width: 130px;
 }
