@@ -2,8 +2,9 @@ const body = document.querySelector('body');
 const toolsBtnArray = document.getElementsByClassName('js-tools__item');
 const filtersContainer = document.querySelector('.filters');
 const jobItemsContainer = document.querySelector('.jobItems');
+let visibleJobItems = document.querySelectorAll('.jobItems.visible');
 let filterArray = [];
-let jobListItems = document.querySelectorAll('.jobItem');
+let jobListItems;
 let jobListItemsFilters = [];
 let jobItemToolsArray = [];
 let allFilters = [];
@@ -25,7 +26,7 @@ async function renderJobList(callback) {
     let html = '';
     jobs.forEach(job => {
         let htmlJobItem = `
-            <div class="jobItem">
+            <div class="jobItem visible">
                 <a href="" class="jobItem__image">
                 <img src="${job.logo}" alt="${job.name}">
                 </a>
@@ -81,19 +82,25 @@ function addFilterHandler(e) {
         filtersContainer.appendChild(newFilterElement);
 
         filterArray.push(filterElement);
-        // console.log(filterArray);
+        console.log('Filters on top: ');
+        console.log(filterArray);
 
         // fitering on jobList 
-        filterOnJobList(filterElement, filterArray);
+        filterJobList(filterElement, filterArray);
 
     } else {
         console.log('filter already exists');
     }
 };
 
-function filterOnJobList(filter, filterArray) {
-    let elementsWithProperFilter = document.querySelectorAll( '.jobItem [data-filter="' + filter + '"]');
 
+
+function filterJobList(filter, filterArray) {
+    let jobListItemsTools = [];
+    let elementsWithClickedFilter = document.querySelectorAll( '.jobItem [data-filter="' + filter + '"]');
+    jobListItems = document.querySelectorAll('.jobItem.visible');
+
+    // console.log(jobListItems);
     jobListItems.forEach(function(job) {
         let classList = job.classList;
         if ( classList.contains('visible') ) {
@@ -101,18 +108,32 @@ function filterOnJobList(filter, filterArray) {
         }
         classList.add("hidden");
     });
-    
-    for ( let i = 0; i < elementsWithProperFilter.length; i++ ) {
-        let parent = elementsWithProperFilter[i].closest('.jobItem');
-        let parentClassList = parent.classList;
-        let parentTools = parent.getElementsByClassName('js-tools__item');
-        
+
+    for ( let i = 0; i < elementsWithClickedFilter.length; i++ ) {
+        let parent = elementsWithClickedFilter[i].closest('.jobItem');
+        parent.classList.remove('hidden');
+        parent.classList.add('visible');
+
+        jobListItems = document.querySelectorAll('.jobItem.visible');
+    }   
+    console.log(jobListItems);
         // console.log(parentTools);
-        for ( let i = 0; i < parentTools.length; i++ ) {
-            let parentToolsItem = parentTools[i].dataset.filter;
-            jobItemToolsArray.push(parentToolsItem);
+        // for ( let i = 0; i < parentTools.length; i++ ) {
+        //     let parentToolsItem = parentTools[i].dataset.filter;
+        //     jobItemToolsArray.push(parentToolsItem);
+        // }
+    for ( let i = 0; i < jobListItems.length; i++ ) {
+        let tools = jobListItems[i].querySelectorAll('.tools__item');
+        let toolsArr = [];
+        
+        for ( let i = 0; i < tools.length; i++ ) {
+            let tool = tools[i].dataset.filter;
+            toolsArr = toolsArr.push(tool);
+            console.log(toolsArr);
         }
-        if ( filterArray.every(elem => jobItemToolsArray.indexOf(elem) > -1) ) {
+        // console.log(toolsArr);
+        // jobListItemsTools = 
+        if ( filterArray.every(elem => jobListItems.indexOf(elem) > -1) ) {
             if ( parentClassList.contains('hidden') ) {
                 parentClassList.remove('hidden');  
             }
@@ -121,7 +142,6 @@ function filterOnJobList(filter, filterArray) {
     }
 
     jobItemToolsArrayUniQue = [... new Set(jobItemToolsArray)];
-    // console.log(jobItemToolsArrayUniQue);
 }
 
 function getAllFiltersFromJobList() {
@@ -132,49 +152,31 @@ function getAllFiltersFromJobList() {
         allFilters.push(filter);
     }
     allFilters = [... new Set(allFilters)];
-    console.log('All filters: ' + allFilters);
+    console.log('All filters: ');
+    console.log(allFilters);
 }
 
+// let visiblejobListItemsFilters = [];
+// let allVisibleFilters = [];
 
-// function filterOnJobList(filter, filterArray) {
+// function getAllVisibleFiltersFromJobList() {
+//     visibleJobListItemsFilters = visibleJobItems.querySelectorAll('.tools__item');
     
-//     let jobListItems = document.querySelectorAll('.jobItem');
-//     let elementsWithProperFilter = document.querySelectorAll( '.jobItem [data-filter="' + filter + '"]');
-
-//     jobListItems.forEach(function(job) {
-//         let classList = job.classList;
-//         if ( classList.contains('visible') ) {
-//             classList.remove("visible");  
-//         }
-//         classList.add("hidden");
-//     });
-    
-//     for ( let i = 0; i < elementsWithProperFilter.length; i++ ) {
-//         let parent = elementsWithProperFilter[i].closest('.jobItem');
-//         let parentClassList = parent.classList;
-//         let parentTools = parent.getElementsByClassName('js-tools__item');
-        
-//         // console.log(parentTools);
-//         for ( let i = 0; i < parentTools.length; i++ ) {
-//             let parentToolsItem = parentTools[i].dataset.filter;
-//             jobItemToolsArray.push(parentToolsItem);
-//         }
-//         if ( filterArray.every(elem => jobItemToolsArray.indexOf(elem) > -1) ) {
-//             if ( parentClassList.contains('hidden') ) {
-//                 parentClassList.remove('hidden');  
-//             }
-//             parentClassList.add('visible');
-//         }
+//     for ( let i = 0; i < visibleJobListItemsFilters.length; i++ ) {
+//         let filter = visibleJobListItemsFilters[i].dataset.filter;
+//         allVisibleFilters.push(filter);
 //     }
-//     jobItemToolsArrayUniQue = [... new Set(jobItemToolsArray)];
-//     console.log(jobItemToolsArrayUniQue);
+//     allVisibleFilters = [... new Set(allVisibleFilters)];
+//     console.log('All filters from visible job items: ' + allVisibleFilters);
 // }
+
 
 function removeFilterHandler(el) {
     let element = el.target;
     let filter = element.dataset.filter;
     filterArray = filterArray.filter( (value) => { return value != filter; } );
-    // console.log(filterArray);
+    console.log('Filtest on to after remove item:');
+    console.log(filterArray);
     element.remove();
 
     jobItemToolsArray = jobItemToolsArray.filter( (value) => { return value != filter; } );
