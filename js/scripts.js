@@ -77,34 +77,45 @@ function addFilterHandler(e) {
         filterArray.push(filterElement);
         console.log(filterArray);
 
-
         // fitering on jobList 
-        // 
-        let jobListItems = document.querySelectorAll('.jobItem');
-        let elementsWithProperFilter = document.querySelectorAll( '.jobItem [data-filter="' + filterElement + '"]');
-        
-        jobListItems.forEach(function(job) {
-            let classList = job.classList;
-            if ( classList.contains('visible') ) {
-                classList.remove("visible");  
-            }
-            classList.add("hidden");
-        });
-        
-        for (let i = 0; i < elementsWithProperFilter.length; i++) {
-            let parent = elementsWithProperFilter[i].closest('.jobItem');
-            let parentClassList = parent.classList;
-
-            if ( parentClassList.contains('hidden') ) {
-                parentClassList.remove('hidden');  
-            }
-            parentClassList.add('visible');
-        }
+        filterOnJobList(filterElement, filterArray);
 
     } else {
         console.log('filter already exists');
     }
 };
+
+function filterOnJobList(filter, filterArray) {
+    
+    let jobListItems = document.querySelectorAll('.jobItem');
+    let elementsWithProperFilter = document.querySelectorAll( '.jobItem [data-filter="' + filter + '"]');
+
+    jobListItems.forEach(function(job) {
+        let classList = job.classList;
+        if ( classList.contains('visible') ) {
+            classList.remove("visible");  
+        }
+        classList.add("hidden");
+    });
+    
+    for ( let i = 0; i < elementsWithProperFilter.length; i++ ) {
+        let parent = elementsWithProperFilter[i].closest('.jobItem');
+        let parentClassList = parent.classList;
+        let parentTools = parent.getElementsByClassName('js-tools__item');
+        let parentToolsArray = [];
+        // console.log(parentTools);
+        for ( let i = 0; i < parentTools.length; i++ ) {
+            let parentToolsItem = parentTools[i].dataset.filter;
+            parentToolsArray.push(parentToolsItem);
+        }
+        if ( filterArray.every(elem => parentToolsArray.indexOf(elem) > -1) ) {
+            if ( parentClassList.contains('hidden') ) {
+                parentClassList.remove('hidden');  
+            }
+            parentClassList.add('visible');
+        }
+    }
+}
 
 function removeFilterHandler(el) {
     let element = el.target;
